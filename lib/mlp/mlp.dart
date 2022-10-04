@@ -4,15 +4,15 @@ import 'package:mlpdart/math/function_utils.dart' as fu;
 
 import 'neuron.dart';
 
-class MultiLayerPerception {
+class MultiLayerPerceptron {
   List<Layer?> layers = [];
   int size;
 
-  MultiLayerPerception(this.size) {
+  MultiLayerPerceptron(this.size) {
     layers = List<Layer?>.filled(size, null);
   }
 
-  static void forward(MultiLayerPerception mlp, List<double> inputs,
+  static void forward(MultiLayerPerceptron mlp, List<double> inputs,
       {double bias = 0}) {
     // Bring the inputs into the input layer
     mlp.layers[0] = Layer(inputs);
@@ -33,7 +33,7 @@ class MultiLayerPerception {
   }
 
   static void backpropagation(
-      MultiLayerPerception mlp, double learningRate, Pair datas) {
+      MultiLayerPerceptron mlp, double learningRate, Pair datas) {
     int numberLayers = mlp.layers.length;
     int outputLayerIndex = numberLayers - 1;
 
@@ -89,7 +89,7 @@ class MultiLayerPerception {
 
 // This function sums up all the gradient connecting a given neuron in a given layer
   static double sumGradient(
-      MultiLayerPerception mlp, int neuronIndex, int layerIndex) {
+      MultiLayerPerceptron mlp, int neuronIndex, int layerIndex) {
     double gradientSum = 0;
     Layer currentLayer = mlp.layers[layerIndex]!;
     for (int i = 0; i < currentLayer.neurons.length; i++) {
@@ -101,7 +101,7 @@ class MultiLayerPerception {
   }
 
 // This function is used to train
-  static void train(MultiLayerPerception mlp, Dataset dataset, int iterations,
+  static void train(MultiLayerPerceptron mlp, Dataset dataset, int iterations,
       double learningRate,
       {double bias = 0}) {
     for (int i = 0; i < iterations; i++) {
