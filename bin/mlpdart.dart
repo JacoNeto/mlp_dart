@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:mlpdart/mlp/dataset.dart';
 import 'package:mlpdart/mlp/layer.dart';
 import 'package:mlpdart/mlp/mlp.dart';
 import 'package:mlpdart/mlp/neuron.dart';
 
 void main() {
+  File('data/entriesAI.csv').readAsString().then((String contents) {
+    print(contents);
+  });
+  /*
   // Set Min and Max weight value for all neurons
   Neuron.setRange(-1, 1);
 
@@ -39,12 +45,11 @@ void main() {
     print(
         'inputs: ${mlp.layers[0]!.neurons[0].value}, ${mlp.layers[0]!.neurons[1].value}');
     print('output: ${mlp.layers[2]!.neurons[0].value}');
-  }
+  }*/
 }
 
 // XOR Example
 Dataset loadDataset() {
-  // TODO: Make this more generic. / create a get function from yaml etc.
   List<double> input1 = [0, 0];
   List<double> input2 = [0, 1];
   List<double> input3 = [1, 0];
