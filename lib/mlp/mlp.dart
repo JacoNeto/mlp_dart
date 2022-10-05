@@ -81,7 +81,7 @@ class MultiLayerPerceptron {
       }
     }
 
-    // Update all the weights
+    // Atualiza os pesos
     for (int i = 0; i < mlp.layers.length; i++) {
       for (int j = 0; j < mlp.layers[i]!.neurons.length; j++) {
         mlp.layers[i]!.neurons[j].setWeights();
