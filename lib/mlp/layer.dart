@@ -5,7 +5,7 @@ class Layer {
   List<Neuron> neurons = [];
 
   // Constructor for input layers
-  Layer(List<double> inputs) {
+  Layer.entry(List<double> inputs) {
     for (var value in inputs) {
       neurons.add(Neuron.entry(value, <double>[]));
     }

@@ -24,6 +24,7 @@ class Neuron {
     gradient = 0.0;
   }
 
+  // utilizado para definir e atualizar os pesos dos neurônios
   setWeights() {
     weights = previousWeights;
   }

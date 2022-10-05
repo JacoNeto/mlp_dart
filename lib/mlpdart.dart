@@ -24,39 +24,52 @@ Future<void> mlpdart() async {
   // Create the training dataset
   Dataset dataset = await loadDataset();
   // Create the testing dataset
-  // Dataset testingDataset = await loadTestDataset();
+  Dataset testingDataset = await loadTestDataset();
 
-  print("============");
-  print("Output before training");
-  print("============");
-  print(dataset.pairs);
+  print("\n*********************************************");
+  print("****Valores de treino na primeira iteração***");
+  print("*********************************************");
+
   for (Pair i in dataset.pairs) {
     MultiLayerPerceptron.forward(mlp, i.inputData, bias: 0);
-    print("Inputs:");
+
+    var str = "";
+    print("\nInputs:");
     for (Neuron n in mlp.layers[0]!.neurons) {
-      print("[${n.value}]");
+      str += n.value!.toStringAsFixed(0);
     }
+    print(str);
+
+    str = "";
+    print("--------------------");
     print("Outputs:");
     for (Neuron n in mlp.layers[2]!.neurons) {
-      print("[${n.value}]");
+      str += "${n.value!.toStringAsFixed(2)} ";
     }
+    print(str);
   }
 
   MultiLayerPerceptron.train(mlp, dataset, 1000, 0.4, bias: 0);
 
-  print("============");
-  print("Output after training");
-  print("============");
-  for (Pair i in dataset.pairs) {
+  print("\n\n\n***********************");
+  print("****Valores de Teste***");
+  print("***********************\n");
+  for (Pair i in testingDataset.pairs) {
+    var str = "";
     MultiLayerPerceptron.forward(mlp, i.inputData, bias: 0);
-    print("Inputs:");
+    print("\nInputs:");
     for (Neuron n in mlp.layers[0]!.neurons) {
-      print("[${n.value}]");
+      str += n.value!.toStringAsFixed(0);
     }
+    print(str);
+
+    str = "";
+    print("--------------------");
     print("Outputs:");
     for (Neuron n in mlp.layers[2]!.neurons) {
-      print("[${n.value}]");
+      str += "${n.value!.toStringAsFixed(2)} ";
     }
+    print(str);
   }
 
   /*print("============");
@@ -75,7 +88,6 @@ Future<Dataset> loadDataset() async {
 
   final data = await XMLUtils.loadData();
   for (List<dynamic> line in data) {
-    print(line[0]);
     if (line[2].toString() == "treino") {
       var value = line[0];
       var input = <double>[];

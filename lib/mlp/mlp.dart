@@ -15,19 +15,19 @@ class MultiLayerPerceptron {
   static void forward(MultiLayerPerceptron mlp, List<double> inputs,
       {double bias = 0}) {
     // Bring the inputs into the input layer
-    mlp.layers[0] = Layer(inputs);
+    mlp.layers[0] = Layer.entry(inputs);
 
     // Forward propagation
     for (int i = 1; i < mlp.layers.length; i++) {
       // Starts from 1st hidden layer
       for (int j = 0; j < mlp.layers[i]!.neurons.length; j++) {
-        double sum = 0;
+        double net = 0;
         for (int k = 0; k < mlp.layers[i - 1]!.neurons.length; k++) {
-          sum += mlp.layers[i - 1]!.neurons[k].value! *
+          net += mlp.layers[i - 1]!.neurons[k].value! *
                   mlp.layers[i]!.neurons[j].weights[k] +
               bias;
         }
-        mlp.layers[i]!.neurons[j].value = fu.sigmoid(sum);
+        mlp.layers[i]!.neurons[j].value = fu.sigmoid(net);
       }
     }
   }
