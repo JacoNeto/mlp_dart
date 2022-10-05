@@ -44,10 +44,20 @@ Future<void> mlpdart() async {
     print("--------------------");
     print("Outputs:");
     print("?                  5                     6");
+    int aux = 0;
+    var greaterIndex = 0;
+    double greater = mlp.layers[2]!.neurons[0].value!;
     for (Neuron n in mlp.layers[2]!.neurons) {
+      if (n.value! > greater) {
+        greater = n.value!;
+        greaterIndex = aux;
+      }
       str += "${n.value!.toString()} ";
+      aux++;
     }
     print(str);
+
+    rightWrong(i.outputData, greaterIndex);
   }
 
   MultiLayerPerceptron.train(mlp, trainingDataset, 1000, 0.4, bias: 0);
@@ -68,10 +78,21 @@ Future<void> mlpdart() async {
     print("--------------------");
     print("Outputs:");
     print("?                  5                     6");
+
+    int aux = 0;
+    var greaterIndex = 0;
+    double greater = mlp.layers[2]!.neurons[0].value!;
     for (Neuron n in mlp.layers[2]!.neurons) {
+      if (n.value! > greater) {
+        greater = n.value!;
+        greaterIndex = aux;
+      }
       str += "${n.value!.toString()} ";
+      aux++;
     }
     print(str);
+
+    rightWrong(i.outputData, greaterIndex);
   }
 }
 
@@ -134,4 +155,27 @@ List<double> getExpectedOutput(String output) {
     return [0, 0, 1];
   }
   return [1, 0, 0];
+}
+
+void rightWrong(List<double> expected, int index) {
+  print("expected: $expected");
+  if (expected[1] == 1) {
+    if (index == 1) {
+      print("ACERTOU");
+    } else {
+      print("ERROU");
+    }
+  } else if (expected[2] == 1) {
+    if (index == 2) {
+      print("ACERTOU");
+    } else {
+      print("ERROU");
+    }
+  } else {
+    if (index == 0) {
+      print("ACERTOU");
+    } else {
+      print("ERROU");
+    }
+  }
 }
