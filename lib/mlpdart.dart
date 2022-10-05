@@ -15,23 +15,23 @@ Future<void> mlpdart() async {
   // Create a Neural Network with 3 Layers
   MultiLayerPerceptron mlp =
       MultiLayerPerceptron(3); // 1 input + 1 hidden + 1 output
-  // No need to add input layer, it will be added from dataset automatically
+  // No need to add input layer, it will be added from trainingDataset automatically
   mlp.layers[1] = Layer.hidden(
       8, 20); // Hidden layer / 8 neurons each have 20 weights (comlpections)
   mlp.layers[2] = Layer.hidden(
       3, 8); // Output layer / 3 neuron with 8 weights (comlpections)
 
-  // Create the training dataset
-  Dataset dataset = await loadDataset();
-  // Create the testing dataset
+  // Create the training trainingDataset
+  Dataset trainingDataset = await loadDataset();
+  // Create the testing trainingDataset
   Dataset testingDataset = await loadTestDataset();
 
   print("\n*********************************************");
   print("****Valores de treino na primeira iteração***");
   print("*********************************************");
 
-  for (Pair i in dataset.pairs) {
-    MultiLayerPerceptron.forward(mlp, i.inputData, bias: 0);
+  for (Pair i in trainingDataset.pairs) {
+    MultiLayerPerceptron.forwardpropagation(mlp, i.inputData, bias: 0);
 
     var str = "";
     print("\nInputs:");
@@ -43,20 +43,21 @@ Future<void> mlpdart() async {
     str = "";
     print("--------------------");
     print("Outputs:");
+    print("?                  5                     6");
     for (Neuron n in mlp.layers[2]!.neurons) {
-      str += "${n.value!.toStringAsFixed(2)} ";
+      str += "${n.value!.toString()} ";
     }
     print(str);
   }
 
-  MultiLayerPerceptron.train(mlp, dataset, 1000, 0.4, bias: 0);
+  MultiLayerPerceptron.train(mlp, trainingDataset, 1000, 0.4, bias: 0);
 
   print("\n\n\n***********************");
   print("****Valores de Teste***");
   print("***********************\n");
   for (Pair i in testingDataset.pairs) {
     var str = "";
-    MultiLayerPerceptron.forward(mlp, i.inputData, bias: 0);
+    MultiLayerPerceptron.forwardpropagation(mlp, i.inputData, bias: 0);
     print("\nInputs:");
     for (Neuron n in mlp.layers[0]!.neurons) {
       str += n.value!.toStringAsFixed(0);
@@ -66,25 +67,16 @@ Future<void> mlpdart() async {
     str = "";
     print("--------------------");
     print("Outputs:");
+    print("?                  5                     6");
     for (Neuron n in mlp.layers[2]!.neurons) {
-      str += "${n.value!.toStringAsFixed(2)} ";
+      str += "${n.value!.toString()} ";
     }
     print(str);
   }
-
-  /*print("============");
-  print("Output after training");
-  print("============");
-  for (var i in dataset.pairs) {
-    MultiLayerPerceptron.forward(mlp, i.inputData, bias: 0);
-    print(
-        'inputs: ${mlp.layers[0]!.neurons[0].value}, ${mlp.layers[0]!.neurons[1].value}');
-    print('output: ${mlp.layers[2]!.neurons[0].value}');
-  }*/
 }
 
 Future<Dataset> loadDataset() async {
-  var dataset = Dataset(); // Empty Dataset
+  var trainingDataset = Dataset(); // Empty Dataset
 
   final data = await XMLUtils.loadData();
   for (List<dynamic> line in data) {
@@ -98,19 +90,19 @@ Future<Dataset> loadDataset() async {
         input.add(digit!.toDouble());
       }
 
-      // Saídas esperadas de acordo com o dataset
+      // Saídas esperadas de acordo com o trainingDataset
       var expectedOutput = getExpectedOutput(line[1].toString());
 
-      // Preenche o dataset com os dados de entrada e saída
-      dataset.pairs.add(Pair(input, expectedOutput));
+      // Preenche o trainingDataset com os dados de entrada e saída
+      trainingDataset.pairs.add(Pair(input, expectedOutput));
     }
   }
 
-  return dataset;
+  return trainingDataset;
 }
 
 Future<Dataset> loadTestDataset() async {
-  var dataset = Dataset(); // Empty Dataset
+  var trainingDataset = Dataset(); // Empty Dataset
 
   final data = await XMLUtils.loadData();
   for (List<dynamic> line in data) {
@@ -124,15 +116,15 @@ Future<Dataset> loadTestDataset() async {
         input.add(digit!.toDouble());
       }
 
-      // Saídas esperadas de acordo com o dataset
+      // Saídas esperadas de acordo com o trainingDataset
       var expectedOutput = getExpectedOutput(line[1].toString());
 
-      // Preenche o dataset com os dados de entrada e saída
-      dataset.pairs.add(Pair(input, expectedOutput));
+      // Preenche o trainingDataset com os dados de entrada e saída
+      trainingDataset.pairs.add(Pair(input, expectedOutput));
     }
   }
 
-  return dataset;
+  return trainingDataset;
 }
 
 List<double> getExpectedOutput(String output) {
